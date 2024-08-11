@@ -99,14 +99,14 @@ NRF_BLE_GATT_DEF(m_gatt);                                               /**< GAT
 BLE_LBS_C_ARRAY_DEF(m_lbs_c, NRF_SDH_BLE_CENTRAL_LINK_COUNT);           /**< LED Button client instances. */
 BLE_DB_DISCOVERY_ARRAY_DEF(m_db_disc, NRF_SDH_BLE_CENTRAL_LINK_COUNT);  /**< Database discovery module instances. */
 
-static char const m_target_periph_name[] = "ImpedanceX1";             /**< Name of the device we try to connect to. This name is searched for in the scan report data*/
-static char const m_target_periph_name1[] = "ImpedanceX2";             /**< Name of the device we try to connect to. This name is searched for in the scan report data*/
-static char const m_target_periph_name2[] = "ImpedanceX3";             /**< Name of the device we try to connect to. This name is searched for in the scan report data*/
-static char const m_target_periph_name3[] = "ImpedanceX4";
-static char const m_target_periph_name4[] = "ImpedanceX5";/**< Name of the device we try to connect to. This name is searched for in the scan report data*/
-static char const m_target_periph_name5[] = "ImpedanceX6";
-static char const m_target_periph_name6[] = "ImpedanceX7";
-static char const m_target_periph_name7[] = "ImpedanceX8";
+static char const m_target_periph_name[] = "Acupoint1";             /**< Name of the device we try to connect to. This name is searched for in the scan report data*/
+static char const m_target_periph_name1[] = "Acupoint2";             /**< Name of the device we try to connect to. This name is searched for in the scan report data*/
+static char const m_target_periph_name2[] = "Acupoint3";             /**< Name of the device we try to connect to. This name is searched for in the scan report data*/
+static char const m_target_periph_name3[] = "Acupoint4";
+static char const m_target_periph_name4[] = "Acupoint5";/**< Name of the device we try to connect to. This name is searched for in the scan report data*/
+static char const m_target_periph_name5[] = "Acupoint6";
+static char const m_target_periph_name6[] = "Acupoint7";
+static char const m_target_periph_name7[] = "Acupoint8";
 static uint8_t m_scan_buffer_data[BLE_GAP_SCAN_BUFFER_MIN]; /**< buffer where advertising reports will be stored by the SoftDevice. */
 
 /**@brief Pointer to the buffer where advertising reports will be stored by the SoftDevice. */
