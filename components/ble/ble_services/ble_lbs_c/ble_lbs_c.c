@@ -159,7 +159,7 @@ static void on_hvx(ble_lbs_c_t * p_ble_lbs_c, ble_evt_t const * p_ble_evt)
     // Check if this is a Button notification.
     if (p_ble_evt->evt.gattc_evt.params.hvx.handle == p_ble_lbs_c->peer_lbs_db.button_handle)
     {
-        if (p_ble_evt->evt.gattc_evt.params.hvx.len == 20)
+        // if (p_ble_evt->evt.gattc_evt.params.hvx.len == 20)
         {
             ble_lbs_c_evt_t ble_lbs_c_evt;
 
