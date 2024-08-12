@@ -19,7 +19,7 @@ from constants import ALL_NAME_LIST, PANEL_NAME_LIST, ALL_NAME_LIST_AS_ONE
 DISPLAY_SECONDS = 10
 PORT = "COM13"
 BAUDRATE = 250000
-PACKAGE_SIZE = 15
+PACKAGE_SIZE = 21
 
 class SerialDataHandler:
     def __init__(self, port, baudrate):
@@ -43,8 +43,7 @@ class SerialDataHandler:
         while k + PACKAGE_SIZE < data_len:
             if (
                 self.data_bytes[k] == 0x41 
-                and self.data_bytes[k + 14] == 0x0A
-                and self.data_bytes[k + 12] == self.data_bytes[k + 13]
+                and self.data_bytes[k + PACKAGE_SIZE - 1] == 0x0A
             ):
                 raw_data = parse_package_data(
                     self.data_bytes[k : k + PACKAGE_SIZE]
