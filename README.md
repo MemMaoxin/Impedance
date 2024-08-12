@@ -1,2 +1,7 @@
-# Impedance master pproject which can connect with 8 salves
-location: examples\ble_central\ble_app_multilink_central8\pca10040\s132\arm5_no_packs
+# Impedance master pproject which can connect with 8 acupoint salves
+
+### Master project path: 
+examples/ble_central/ble_app_multilink_central8/pca10040/s132/arm5_no_packs
+
+### GUI path:
+python_GUI/MultiPPG.py
