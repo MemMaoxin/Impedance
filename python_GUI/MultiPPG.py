@@ -9,6 +9,7 @@ import numpy as np
 import pyqtgraph as pg
 import serial
 from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtCore import Qt
 
 from serial_data_parse import parse_package_data
@@ -20,6 +21,9 @@ DISPLAY_SECONDS = 10
 PORT = "COM13"
 BAUDRATE = 250000
 PACKAGE_SIZE = 21
+
+file_custom = None
+file_open_flag = False
 
 class SerialDataHandler:
     def __init__(self, port, baudrate):
@@ -33,8 +37,15 @@ class SerialDataHandler:
         if count:
             rec_str = self.ser.read(count)
             self.data_bytes += rec_str
+            self.write_to_file(rec_str)
             return self.process_data()
         return None
+    
+    def write_to_file(self, data):
+        global file_custom, file_open_flag
+
+        if file_open_flag:
+            file_custom.write(data)
 
     def process_data(self):
         data_len = len(self.data_bytes)
@@ -142,6 +153,14 @@ class MainWidget(QtWidgets.QMainWindow):
 
             main_layout.addWidget(label, 1 + 2 * k, 1, 1, 5)
             main_layout.addWidget(pw, 2 + 2 * k, 1, 1, 5)
+        
+        # Save button
+        self.saveButton = QtWidgets.QPushButton(main_widget)
+        self.saveButton.setText("Record Data")
+        self.saveButton.setStyleSheet("QPushButton{color:#D2691E}""QPushButton:hover{color:	#FF4500}""QPushButton{background-color:	#000000}""QPushButton{border:1px}""QPushButton{border-radius:10px}""QPushButton{padding:6px 6px}""QPushButton{font:bold 20px}")
+        self.saveButton.clicked.connect(self.action_save)
+        number_of_plot_widgets = 1 + 2 * len(self.plot_widgets)
+        main_layout.addWidget(self.saveButton, number_of_plot_widgets, 1, 1, 5)
 
         self.setCentralWidget(main_widget)
 
@@ -172,7 +191,7 @@ class MainWidget(QtWidgets.QMainWindow):
         self.consumer_threads = []
         for channel_name in self.data_plotter.all_name_list_as_one:
             thread = threading.Thread(
-                target=self.consumer_ppg, args=(channel_name,), daemon=True
+                target=self.consumer_signal, args=(channel_name,), daemon=True
             )
             thread.start()
             self.consumer_threads.append(thread)
@@ -184,7 +203,7 @@ class MainWidget(QtWidgets.QMainWindow):
                 for raw_data in raw_data_list:
                     self.data_plotter.update_data_arrays(raw_data)
 
-    def consumer_ppg(self, channel_name):
+    def consumer_signal(self, channel_name):
         while True:
             raw_data = self.data_plotter.all_queue_dict[channel_name].get()
             index_on_time = self.data_plotter.all_index_dict[channel_name]
@@ -195,6 +214,25 @@ class MainWidget(QtWidgets.QMainWindow):
                 self.data_plotter.all_data_array_dict[channel_name][:-1] = self.data_plotter.all_data_array_dict[channel_name][1:]
                 self.data_plotter.all_data_array_dict[channel_name][-1] = raw_data
 
+    def action_save(self):
+        global file_custom, file_open_flag
+
+        if self.saveButton.text() == "Record Data":
+            custom_file_name, file_ok = QFileDialog.getSaveFileName(self,
+                                                         "Data Save",
+                                                         "./",
+                                                         "Text Files (*.bin)")
+            if file_ok:
+                if not custom_file_name:
+                    custom_file_name = "test_default_file.bin"
+                file_custom = open(custom_file_name, 'wb')
+                file_open_flag = 1
+                self.saveButton.setText("Stop Recording Data")
+        elif self.saveButton.text() == "Stop Recording Data":
+            self.saveButton.setText("Record Data")
+            file_open_flag = 0
+            file_custom.close()
+    
 def _async_raise(tid, exctype):
     """Raises an exception in the thread with id tid."""
     if not inspect.isclass(exctype):
